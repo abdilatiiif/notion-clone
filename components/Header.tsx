@@ -11,8 +11,6 @@ import {
 function Header() {
   const { user } = useUser();
 
-  console.log("USER", user);
-
   return (
     <div className="flex items-center justify-between p-5">
       {user && (
