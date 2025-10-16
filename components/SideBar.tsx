@@ -21,6 +21,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useEffect, useState } from "react";
+import SideBarOption from "./SideBarOption";
 
 interface RoomDocument extends DocumentData {
   createdAt: string;
@@ -81,8 +82,6 @@ function SideBar() {
     setGroupedData(grouped);
   }, [data]);
 
-  console.log("groupedData owner:", groupedData.owner);
-
   const menuOptions = (
     <>
       <NewDocumentButton />
@@ -96,7 +95,11 @@ function SideBar() {
           {/* /groupedData.owner.map((doc) => <SideBareOption key={doc.roomId} />)*/}
 
           {groupedData.owner.map((doc) => (
-            <p key={doc.roomId}>{doc.roomId}</p>
+            <SideBarOption
+              key={doc.id}
+              href={`/doc/${doc.roomId}`}
+              id={doc.id}
+            />
           ))}
         </>
       )}
