@@ -9,8 +9,6 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 function SideBarOption({ href, id }: { href: string; id: string }) {
   const [data, loading, error] = useDocumentData(doc(db, "documents", id));
 
-  console.log(data);
-
   const pathName = usePathname();
   const isActive = href.includes(pathName) && pathName !== "/";
 
@@ -19,10 +17,10 @@ function SideBarOption({ href, id }: { href: string; id: string }) {
   return (
     <Link
       href={href}
-      className={`text-center text-black border p-2 rounded-md ${
+      className={`text-center  text-black border-2 p-2 rounded-md ${
         isActive
-          ? " text-black bg-gray-300 font-bold border-black"
-          : "hover:bg-gray-200"
+          ? " text-white bg-green-500 font-bold "
+          : "hover:bg-gray-200 border-2 border-red-300"
       }`}
     >
       <p className="truncate"> {data.title} </p>

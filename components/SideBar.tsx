@@ -40,7 +40,7 @@ function SideBar() {
 
   // every time data changes, it will re render the component
 
-  const [data, loading, error] = useCollection(
+  const [data] = useCollection(
     // Only run the query when the user and their primary email are available
     user?.emailAddresses?.[0]?.emailAddress
       ? query(
