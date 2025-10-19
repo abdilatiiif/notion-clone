@@ -8,7 +8,8 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 
 function SideBarOption({ href, id }: { href: string; id: string }) {
   const [data, loading, error] = useDocumentData(doc(db, "documents", id));
-  console.log(id);
+
+  console.log(data);
 
   const pathName = usePathname();
   const isActive = href.includes(pathName) && pathName !== "/";

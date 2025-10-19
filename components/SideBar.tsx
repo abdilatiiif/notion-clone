@@ -41,19 +41,17 @@ function SideBar() {
   // every time data changes, it will re render the component
 
   const [data, loading, error] = useCollection(
-    // check if user is logged in
-    // also check if every user room sub collection id, matches the user id that is logged in
-    user &&
-      query(
-        collectionGroup(db, "rooms"),
-        where("userId", "==", user.emailAddresses[0].toString())
-      )
+    // Only run the query when the user and their primary email are available
+    user?.emailAddresses?.[0]?.emailAddress
+      ? query(
+          collectionGroup(db, "rooms"),
+          where("userId", "==", user.emailAddresses[0]?.emailAddress)
+        )
+      : undefined
   );
 
   useEffect(() => {
     if (!data) return;
-
-    console.log("📊 Processing data:", data.docs.length, "documents");
 
     const grouped = data?.docs.reduce<{
       owner: RoomDocument[];
@@ -85,16 +83,36 @@ function SideBar() {
   const menuOptions = (
     <>
       <NewDocumentButton />
-      {/*  My Documents */}
-      {groupedData.owner.length === 0 ? (
-        <h2 className="text-gray-500 font-semibold text-sm">No Documents</h2>
-      ) : (
+      <div className="flex py-4 flex-col space-y-4 md:max-w-36">
+        {/*  My Documents */}
+        {groupedData.owner.length === 0 ? (
+          <h2 className="text-gray-500 font-semibold text-sm text-center">
+            No Documents
+          </h2>
+        ) : (
+          <>
+            <h2 className="text-gray-500 font-semibold text-sm">
+              My Documents
+            </h2>
+
+            {groupedData.owner.map((doc) => (
+              <SideBarOption
+                key={doc.id}
+                href={`/doc/${doc.roomId}`}
+                id={doc.id}
+              />
+            ))}
+          </>
+        )}
+      </div>
+      {/* Shared with me documents */}
+
+      {groupedData.editor.length > 0 && (
         <>
-          <h2 className="text-gray-500 font-semibold text-sm">My Documents</h2>
-
-          {/* /groupedData.owner.map((doc) => <SideBareOption key={doc.roomId} />)*/}
-
-          {groupedData.owner.map((doc) => (
+          <h2 className="text-gray-500 font-semibold text-sm mt-4">
+            Shared with me
+          </h2>
+          {groupedData.editor.map((doc) => (
             <SideBarOption
               key={doc.id}
               href={`/doc/${doc.roomId}`}
@@ -103,8 +121,6 @@ function SideBar() {
           ))}
         </>
       )}
-      {/* Shared with me documents */}
-      {/*  list */}
     </>
   );
 
@@ -126,8 +142,8 @@ function SideBar() {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="hidden md:inline">
-        <NewDocumentButton />
+      <div className="hidden md:inline w-64 shrink-0 border-2">
+        {menuOptions}
       </div>
     </div>
   );
