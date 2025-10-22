@@ -13,3 +13,5 @@
 ## liveblocks
 
 https://liveblocks.io/docs/get-started/nextjs-blocknote
+
+## framer-motion
